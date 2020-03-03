@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>叮当售票</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+</head>
+<body>
+<div class="topbar-wrap white">
+    <div class="topbar-inner clearfix">
+        <div class="topbar-logo-wrap clearfix">
+            <h1 class="topbar-logo none"><a href="index.html" class="navbar-brand">后台管理</a></h1>
+            <ul class="navbar-list clearfix">
+                <li><a class="on" href="/book">首页</a></li>
+                <li><a href="/book" target="_blank">叮当售票</a></li>
+            </ul>
+        </div>
+        <div class="top-info-wrap">
+            <ul class="top-info-list clearfix">
+                <li><a href="#">我的</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container clearfix">
+    <div class="sidebar-wrap">
+        <div class="sidebar-title">
+            <h1>菜单</h1>
+        </div>
+        <div class="sidebar-content">
+            <ul class="sidebar-list">
+                <li>
+                    <a href="#"><i class="icon-font">&#xe003;</i>常用操作</a>
+                    <ul class="sub-menu">
+                        <li><a href="/book"><i class="icon-font">&#xe008;</i>购票</a></li>
+                        <li><a href="/dingdanlist"><i class="icon-font">&#xe008;</i>我的订单</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <!--/sidebar-->
+    <div class="main-wrap">
+
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="index.html">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">火车票</span></div>
+        </div>
+        <div class="search-wrap">
+            <div class="search-content">
+                <form action="#" method="post">
+                    <table class="search-tab">
+                        <tr>
+                            <th width="120">选择分类:</th>
+                            <td>
+                                <select name="search-sort" id="">
+                                    <option value="">全部</option>
+                                    <option value="19">直达</option><option value="20">换乘</option>
+                                </select>
+                            </td>
+
+                            <td><input class="common-text" placeholder="出发点" name="from" value="{{ u[0][2] }}" id="" type="text"></td>
+                            <td><input class="common-text" placeholder="到达地" name="to" value="{{ u[0][6] }}" id="" type="text"></td>
+                            <td><input class="common-text" placeholder="出发日期" name="chufa" value="{{ ctime }}" id="" type="text"></td>
+
+                            <td><input class="btn btn-primary btn2" name="sub" value="查询" type="submit"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="result-wrap">
+            <form name="myform" id="myform" method="post">
+
+                <div class="result-content">
+                    <table class="result-tab" width="100%">
+                        <tr>
+                            <th class="tc" width="5%"><input class="allChoose" name="" type="checkbox"></th>
+                            <th>列车号</th>
+                            <th>车型</th>
+                            <th>出发站</th>
+                            <th>出发时间</th>
+                            <th>中转站</th>
+                            <th>运行时间</th>
+                            <th>到达站</th>
+                            <th>到达时间</th>
+                            <th>价格</th>
+                            <th>余票</th>
+                            <th>操作</th>
+                        </tr>
+                        {% for i in u %}
+                        <tr>
+                            <td class="tc"><input name="id[]" value="59" type="checkbox"></td>
+                            <td>{{ i[0] }}</td>
+                            <td>{{ i[1] }}</td>
+                            <td>{{ i[2] }}</td>
+                            <td>{{ ctime }}{{ i[13] }}</td>
+                            <td>{{ i[4] }}</td>
+                            <td>{{ i[15] }}时{{ i[16] }}分</td>
+                            <td>{{ i[6] }}</td>
+                            <td>{{ ctime }}{{ i[14] }}</td>
+                            <td>硬座:{{ i[11] }}</td>
+                            <td>{{ i[9] }}</td>
+
+                            <td>
+                                <a href="/bookdingdan/{{ i }}"><input type="button" value="购票" class="btn btn-primary btn2"onclick="return buy({{ i[10] }})"></a>
+                            </td>
+                        </tr>
+                         {% endfor %}
+                         {% for i in v %}
+                        <tr>
+                            <td class="tc"><input name="id[]" value="59" type="checkbox"></td>
+                            <td>{{ i[0] }}</td>
+                            <td>{{ i[1] }}</td>
+                            <td>{{ i[2] }}</td>
+                            <td>{{ ctime }}:{{ i[13] }}</td>
+                            <td>{{ i[4] }}</td>
+                            <td>{{ i[15] }}时{{ i[16] }}分</td>
+                            <td>{{ i[6] }}</td>
+                            <td>{{ ctime }}:{{ i[14] }}</td>
+                            <td>硬座:{{ i[11] }}</td>
+                            <td>{{ i[9] }}</td>
+
+                            <td>
+                                <a href="/bookdingdan/{{ i }}"><input type="button" value="购票" class="btn btn-primary btn2" onclick="return buy({{ i[10] }})"></a>
+                            </td>
+                        </tr>
+                         {% endfor %}
+
+                    </table>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--/main-->
+</div>
+</body>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>确认是否购买</title>
+<script type="text/javascript">
+    function buy(id) {
+        if (confirm("确认要购买？")) {
+            window.event.returnValue = true;
+            console.log(id);
+            var data = {
+                'id': id
+            };
+            console.log(data)
+
+        }
+    }
+
+</script>
+</html>
